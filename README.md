@@ -42,6 +42,9 @@ Not sure what to run? `/tr-ask-tom`.
 | [`tr-code-review`](./skills/tr-code-review/) | Two-axis review of a diff: Standards and Spec |
 | [`tr-cleanup-local`](./skills/tr-cleanup-local/) | Close out a finished feature: promote durable notes to `CLAUDE.md`, delete its `.scratch/` files |
 | [`tr-codebase-design`](./skills/tr-codebase-design/) | Deep-module vocabulary: interfaces, depth, seams |
+| [`tr-wayfinder`](./skills/tr-wayfinder/) | Plan an effort too big for one session as a map of decision tickets on the tracker |
+| [`tr-prototype`](./skills/tr-prototype/) | Throwaway prototype to answer a logic or UI design question |
+| [`tr-research`](./skills/tr-research/) | Background agent researches primary sources, writes cited findings to Markdown |
 
 ## Install
 

@@ -33,7 +33,7 @@ Summarise what's present and what's missing in a few lines. Then take the two se
 
 **Section A: Issue tracker.**
 
-> Explainer: The "issue tracker" is where issues live for this repo. `/tr-to-spec`, `/tr-to-tickets`, and `/tr-code-review` read from and write to it. They need to know whether to call `gh issue create` or write a markdown file under `.scratch/`.
+> Explainer: The "issue tracker" is where issues live for this repo. `/tr-to-spec`, `/tr-to-tickets`, `/tr-code-review`, and `/tr-wayfinder` read from and write to it. They need to know whether to call `gh issue create` or write a markdown file under `.scratch/`.
 
 Exactly two choices, no others:
 

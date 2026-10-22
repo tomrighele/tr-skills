@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Ask Tom
 
-You don't remember every skill, so ask. This tree is small on purpose: fourteen skills, one main flow, everything else feeding it.
+You don't remember every skill, so ask. This tree is small on purpose: seventeen skills, one main flow, everything else feeding it.
 
 If the user described a situation, name the one skill to run next and say why in a sentence. If they just typed the command with no context, give them the map below.
 
@@ -34,6 +34,12 @@ Keep steps 1–3 in **one unbroken context window**. The grilling, the spec, and
 
 Then **`/clear` between every ticket**. Each ticket is self-contained by construction, so the last one's context is disposable — and a fresh window implements better than a full one.
 
+## Bigger than one spec: wayfinding
+
+- **`/tr-wayfinder`** — for an effort too big and too foggy for one grilling → spec pass. Charts a **map** on the tracker: a destination, plus decision tickets (research, prototype, grilling, task) worked one per session until the way is clear. It plans, it doesn't build; when the map runs out, hand off to `/tr-to-spec` or the main flow.
+- **`/tr-prototype`** — throwaway code that answers a design question: a single-file HTML logic demo, or several switchable UI variants on one route. Wayfinder's prototype tickets run it; run it alone whenever "how should it behave / look" is the question.
+- **`/tr-research`** — a background agent reads primary sources and writes cited findings to a Markdown file. Wayfinder's research tickets run it; run it alone to delegate reading legwork.
+
 ## Underneath the flow
 
 Reach for these directly when the process isn't the problem.
@@ -57,6 +63,9 @@ Two references that run *beneath* the others, each the source of truth for its v
 | New machine or new project, no container yet | `/tr-setup-devcontainer` |
 | Empty repo for a new app on the unified pipeline | `/tr-unified-setup` |
 | Rough idea, want it sharpened | `/tr-grill-with-docs` |
+| Huge, foggy effort — more than one session can plan | `/tr-wayfinder` |
+| "What should this look/behave like?" | `/tr-prototype` |
+| Need facts from docs or third-party APIs | `/tr-research` |
 | Idea is sharp, want it written down | `/tr-to-spec` |
 | Spec exists, too big for one session | `/tr-to-tickets` |
 | Ticket ready to build | `/tr-implement` |

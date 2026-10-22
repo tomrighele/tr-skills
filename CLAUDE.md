@@ -4,7 +4,7 @@ Read this first when picking the work back up. It records what this tree is, how
 
 ## What this repo is
 
-A curated fork of [Matt Pocock's skills](https://github.com/mattpocock/skills), cut down from ~42 skills to 13, then extended with Tom's own, and reworked to match how Tom engineers. This repo is the **source of truth**; it's destined to become a git repo he can clone to any machine.
+A curated fork of [Matt Pocock's skills](https://github.com/mattpocock/skills), cut down from ~42 skills to 13 (later 16, with wayfinder and its dependencies), then extended with Tom's own, and reworked to match how Tom engineers. This repo is the **source of truth**; it's destined to become a git repo he can clone to any machine.
 
 Layout is flat and deliberate: `skills/tr-<name>/SKILL.md`, one folder per skill, no category directories. That maps one-to-one onto `~/.claude/skills/`, so installing is a copy — see [INSTALL.md](./INSTALL.md) and `sync.sh`.
 
@@ -34,10 +34,13 @@ Layout is flat and deliberate: `skills/tr-<name>/SKILL.md`, one folder per skill
 | `tr-tdd` | Red-green-refactor | model | `tr-codebase-design` |
 | `tr-code-review` | Standards + Spec review | model | — |
 | `tr-codebase-design` | Deep-module vocabulary | model | — |
+| `tr-wayfinder` | Huge effort → map of decision tickets | user | `tr-grilling`, `tr-domain-modeling`, `tr-research`, `tr-prototype` |
+| `tr-prototype` | Throwaway prototype for a design question | model | — |
+| `tr-research` | Primary-source research → Markdown | model | — |
 
 "user" = `disable-model-invocation: true`, reachable only by typing `/tr-<name>`.
 
-`tr-setup-skills` writes `docs/agents/issue-tracker.md` and `docs/agents/domain.md` into the *target* repo; `tr-to-spec`, `tr-to-tickets`, `tr-code-review`, and `tr-cleanup-local` all read them. That's the only shared state between skills.
+`tr-setup-skills` writes `docs/agents/issue-tracker.md` and `docs/agents/domain.md` into the *target* repo; `tr-to-spec`, `tr-to-tickets`, `tr-code-review`, `tr-cleanup-local`, and `tr-wayfinder` all read them. That's the only shared state between skills.
 
 ## Divergences from upstream
 
@@ -71,6 +74,8 @@ Each of these is intentional. If you're editing a skill and something below look
 
 14. **`tr-unified-setup` is wholly new.** No upstream equivalent. Scaffolds an **empty** repo as an app repo for Tom's unified pipeline (`tomrighele/project_unifiedPipeline`): one question round (shape, name, exposure), then copies `templates/`. Two shapes only — microservice (`api`, FastAPI/uv) or front end + microservice (`web` React/Vite/TS/nginx + `api` under `/api`, same origin). *Design points worth keeping:* it **refuses non-empty repos** rather than retrofitting; the microservice lives in `apps/api`, not the root, so adding a front end later is an addition rather than a restructure, and the api's path prefix is one constant (`ROUTE_PREFIX`) for the same reason; every component ships a real passing test so `tests: false` never appears; it verifies with the pipeline's own test commands and a root-context `docker build` + health probe; and it doesn't commit, `git init`, or create the GitHub repo. *The templates are hand-maintained copies* of the pipeline's `template/` (the caller workflow byte for byte, `pipeline.yaml` adapted per shape) — when the pipeline's template or its `@v1` pin changes, update `templates/` by hand. Files named `dot-*` in `templates/` become `.`-files on copy, so the tree's own git never reads them as config.
 
+15. **`tr-wayfinder`, `tr-prototype`, `tr-research` imported as-is from upstream.** Brought in together because wayfinder's ticket types call the other two. Changes are mechanical only: `tr-` names, cross-references (`"tr-grilling"`, `"tr-research"`, …), `/tr-setup-skills` in place of `/setup-matt-pocock-skills`, and upstream's **Wayfinding operations** sections added to both tracker docs (plus the GitHub sub-issue convention they rely on). *Not yet tailored* — no Tom-specific behaviour yet; expect a grilling pass to reshape them. *Watch out:* `wayfinder:*` labels are a second label family alongside `ready-for-agent` (divergence 3); that's deliberate — map tickets are decisions, never implementation work, so the two never share an issue. Repos set up before this import have tracker docs without the Wayfinding section; re-run `/tr-setup-skills` or paste it in.
+
 ### The `${localEnv:USERPROFILE}${localEnv:HOME}` trick
 
 Used throughout `tr-setup-devcontainer`. Exactly one of the two variables is set on any host (Windows sets `USERPROFILE`, macOS/Linux set `HOME`), so the concatenation resolves to whichever exists and the unset one expands to empty. This is what lets a single `devcontainer.json` work on all three machines. It looks like a typo; it isn't.
@@ -93,7 +98,7 @@ Used throughout `tr-setup-devcontainer`. Exactly one of the two variables is set
 cd skills
 
 # 1. No references to removed skills
-grep -rn "setup-matt-pocock-skills\|ask-matt\|/triage\|/wayfinder\|/prototype\|/handoff\|/grill-me\|/research\|/diagnosing-bugs\|improve-codebase-architecture\|/wizard\|/wait-what\|resolving-merge-conflicts\|msk-" .
+grep -rn "setup-matt-pocock-skills\|ask-matt\|/triage\|/wayfinder\|/prototype[^/]\|/handoff\|/grill-me\|/research\|/diagnosing-bugs\|improve-codebase-architecture\|/wizard\|/wait-what\|resolving-merge-conflicts\|msk-" .
 
 # 2. Frontmatter name matches folder name
 for d in tr-*/; do n="${d%/}"; grep -q "^name: $n$" "$d/SKILL.md" || echo "MISMATCH: $n"; done
@@ -106,7 +111,8 @@ grep -rhoE '\]\(\./[^)]+\)' tr-*/SKILL.md
 grep -rni "one question at a time\|one question per turn\|question box" .
 
 # 5. No unprefixed skill cross-references — a bare `code-review` doesn't resolve
-grep -rn '"codebase-design"\|`code-review`\|`tdd`\|`grilling`\|`implement`' .
+#    (`grilling`/`research`/`prototype` are also wayfinder label values — those lines are filtered.)
+grep -rn '"codebase-design"\|`code-review`\|`tdd`\|`grilling`\|`implement`\|"grilling"\|"research"\|"prototype"\|"domain-modeling"' . | grep -v 'wayfinder:\|Type:'
 ```
 
 Checks 1, 2, 4 and 5 must produce no output. Check 3 lists the links; confirm each target exists.
@@ -115,7 +121,7 @@ Then the installer, into a throwaway destination first:
 
 ```bash
 cd ..
-CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # 14 tr-* dirs
+CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # 17 tr-* dirs
 mkdir /tmp/skilltest/tr-ghost /tmp/skilltest/msk-keepme
 CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # tr-ghost pruned, msk-keepme untouched
 find ~/.claude/skills -name .git                           # must stay empty
@@ -126,6 +132,7 @@ Then a live run: install into a scratch project and walk `/tr-setup-skills` → 
 
 ## Open threads
 
-- **Re-adding skills.** `diagnosing-bugs`, `prototype`, and `research` were deliberately cut but are the most likely to be missed. They're recoverable from upstream if a gap shows up in practice — don't re-add speculatively.
+- **Re-adding skills.** `diagnosing-bugs` was deliberately cut and is the most likely to be missed. Recoverable from upstream if a gap shows up in practice — don't re-add speculatively. (`prototype` and `research` came back as wayfinder dependencies — divergence 15.)
+- **Tailoring wayfinder.** Imported verbatim; not yet grilled against how Tom works.
 - **Distribution.** `sync.sh` / `sync.ps1` cover clone-and-refresh, documented in `INSTALL.md`. The open question is still the Claude Code plugin route (`.claude-plugin/plugin.json` + `marketplace.json`, the way upstream ships): it would drop the script entirely, at the cost of namespacing every command to `/tr-skills:tr-implement` and making the installed copy read-only. Not worth it while the skills are still being edited this often.
 - **Dev container validation.** The generated container hasn't been exercised on the work machine or the MacBook yet, only designed for them. The proxy/CA path in particular is written from known failure modes rather than from a verified run — expect to refine `proxy-and-certs.md` after the first real work-machine build.
