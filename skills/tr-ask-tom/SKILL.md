@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Ask Tom
 
-You don't remember every skill, so ask. This tree is small on purpose: seventeen skills, one main flow, everything else feeding it.
+You don't remember every skill, so ask. This tree is small on purpose: eighteen skills, one main flow, everything else feeding it.
 
 If the user described a situation, name the one skill to run next and say why in a sentence. If they just typed the command with no context, give them the map below.
 
@@ -39,6 +39,10 @@ Then **`/clear` between every ticket**. Each ticket is self-contained by constru
 - **`/tr-wayfinder`** — for an effort too big and too foggy for one grilling → spec pass. Charts a **map** on the tracker: a destination, plus decision tickets (research, prototype, grilling, task) worked one per session until the way is clear. It plans, it doesn't build; when the map runs out, hand off to `/tr-to-spec` or the main flow.
 - **`/tr-prototype`** — throwaway code that answers a design question: a single-file HTML logic demo, or several switchable UI variants on one route. Wayfinder's prototype tickets run it; run it alone whenever "how should it behave / look" is the question.
 - **`/tr-research`** — a background agent reads primary sources and writes cited findings to a Markdown file. Wayfinder's research tickets run it; run it alone to delegate reading legwork.
+
+## Learning, off to the side
+
+- **`/tr-teach`** — learn a topic over many sessions, in its own directory (not the project you're working in). Interviews you on why and on what you already know, then builds short visual-first HTML lessons, grounded in cited sources, with sports-stats and math analogies, each ending in a drill. Shares nothing with the main flow. Stuck on a concept mid-grilling? Note it, finish the round, learn it with `/tr-teach` in a separate workspace, come back.
 
 ## Underneath the flow
 
@@ -73,5 +77,6 @@ Two references that run *beneath* the others, each the source of truth for its v
 | One behaviour to build, no ceremony | `/tr-tdd` |
 | Branch or PR to review | `/tr-code-review` |
 | Stress-test thinking outside a repo | `/tr-grilling` |
+| Want to actually learn a topic, over weeks | `/tr-teach` |
 | A term means two things and it's causing bugs | `/tr-domain-modeling` |
 | A module's interface feels wrong | `/tr-codebase-design` |

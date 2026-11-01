@@ -45,6 +45,7 @@ Not sure what to run? `/tr-ask-tom`.
 | [`tr-wayfinder`](./skills/tr-wayfinder/) | Plan an effort too big for one session as a map of decision tickets on the tracker |
 | [`tr-prototype`](./skills/tr-prototype/) | Throwaway prototype to answer a logic or UI design question |
 | [`tr-research`](./skills/tr-research/) | Background agent researches primary sources, writes cited findings to Markdown |
+| [`tr-teach`](./skills/tr-teach/) | Multi-session teaching workspace: visual-first lessons, sports-stats and math analogies, drills |
 
 ## Install
 

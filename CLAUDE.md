@@ -4,7 +4,7 @@ Read this first when picking the work back up. It records what this tree is, how
 
 ## What this repo is
 
-A curated fork of [Matt Pocock's skills](https://github.com/mattpocock/skills), cut down from ~42 skills to 13 (later 16, with wayfinder and its dependencies), then extended with Tom's own, and reworked to match how Tom engineers. This repo is the **source of truth**; it's destined to become a git repo he can clone to any machine.
+A curated fork of [Matt Pocock's skills](https://github.com/mattpocock/skills), cut down from ~42 skills to 13 (later 16 with wayfinder and its dependencies, then `tr-teach`), then extended with Tom's own, and reworked to match how Tom engineers. This repo is the **source of truth**; it's destined to become a git repo he can clone to any machine.
 
 Layout is flat and deliberate: `skills/tr-<name>/SKILL.md`, one folder per skill, no category directories. That maps one-to-one onto `~/.claude/skills/`, so installing is a copy — see [INSTALL.md](./INSTALL.md) and `sync.sh`.
 
@@ -37,6 +37,7 @@ Layout is flat and deliberate: `skills/tr-<name>/SKILL.md`, one folder per skill
 | `tr-wayfinder` | Huge effort → map of decision tickets | user | `tr-grilling`, `tr-domain-modeling`, `tr-research`, `tr-prototype` |
 | `tr-prototype` | Throwaway prototype for a design question | model | — |
 | `tr-research` | Primary-source research → Markdown | model | — |
+| `tr-teach` | Multi-session teaching workspace | user | — |
 
 "user" = `disable-model-invocation: true`, reachable only by typing `/tr-<name>`.
 
@@ -75,6 +76,8 @@ Each of these is intentional. If you're editing a skill and something below look
 14. **`tr-unified-setup` is wholly new.** No upstream equivalent. Scaffolds an **empty** repo as an app repo for Tom's unified pipeline (`tomrighele/project_unifiedPipeline`): one question round (shape, name, exposure), then copies `templates/`. Two shapes only — microservice (`api`, FastAPI/uv) or front end + microservice (`web` React/Vite/TS/nginx + `api` under `/api`, same origin). *Design points worth keeping:* it **refuses non-empty repos** rather than retrofitting; the microservice lives in `apps/api`, not the root, so adding a front end later is an addition rather than a restructure, and the api's path prefix is one constant (`ROUTE_PREFIX`) for the same reason; every component ships a real passing test so `tests: false` never appears; it verifies with the pipeline's own test commands and a root-context `docker build` + health probe; and it doesn't commit, `git init`, or create the GitHub repo. *The templates are hand-maintained copies* of the pipeline's `template/` (the caller workflow byte for byte, `pipeline.yaml` adapted per shape) — when the pipeline's template or its `@v1` pin changes, update `templates/` by hand. Files named `dot-*` in `templates/` become `.`-files on copy, so the tree's own git never reads them as config.
 
 15. **`tr-wayfinder`, `tr-prototype`, `tr-research` imported as-is from upstream.** Brought in together because wayfinder's ticket types call the other two. Changes are mechanical only: `tr-` names, cross-references (`"tr-grilling"`, `"tr-research"`, …), `/tr-setup-skills` in place of `/setup-matt-pocock-skills`, and upstream's **Wayfinding operations** sections added to both tracker docs (plus the GitHub sub-issue convention they rely on). *Not yet tailored* — no Tom-specific behaviour yet; expect a grilling pass to reshape them. *Watch out:* `wayfinder:*` labels are a second label family alongside `ready-for-agent` (divergence 3); that's deliberate — map tickets are decisions, never implementation work, so the two never share an issue. Repos set up before this import have tracker docs without the Wayfinding section; re-run `/tr-setup-skills` or paste it in.
+
+16. **`tr-teach` imported from upstream `teach`, then tailored.** Standalone; shares nothing with the main flow and runs in its own directory. Added on top of upstream: a **How Tom learns** section that outranks the rest — *visual first* (every lesson opens with a diagram/chart, interactive where the idea has a knob, inline SVG, reference docs lead with the diagram), *sports-stats analogies* (baseball first, then American football — mapped explicitly, with where the analogy breaks, never forced, kept consistent via `NOTES.md`), and *mathematical framing* (formula + worked numeric example). Lessons default to a **light theme**. Also fixes three known upstream gaps: a **first-session starting-point round** (upstream had no assessment, so lessons assumed knowledge), `GLOSSARY-FORMAT.md` actually linked (upstream orphaned it), and a **shuffling quiz component** (models put the right answer in slot A even when told not to). Each lesson has a fixed five-part shape: picture → bridge → mechanism → drill → go deeper. *Why:* Tom asked for it — text-heavy, abstract lessons don't land for him.
 
 ### The `${localEnv:USERPROFILE}${localEnv:HOME}` trick
 
@@ -121,7 +124,7 @@ Then the installer, into a throwaway destination first:
 
 ```bash
 cd ..
-CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # 17 tr-* dirs
+CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # 18 tr-* dirs
 mkdir /tmp/skilltest/tr-ghost /tmp/skilltest/msk-keepme
 CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # tr-ghost pruned, msk-keepme untouched
 find ~/.claude/skills -name .git                           # must stay empty
