@@ -4,7 +4,7 @@ Read this first when picking the work back up. It records what this tree is, how
 
 ## What this repo is
 
-A curated fork of [Matt Pocock's skills](https://github.com/mattpocock/skills), cut down from ~42 skills to 13 (later 16 with wayfinder and its dependencies, then `tr-teach`), then extended with Tom's own, and reworked to match how Tom engineers. This repo is the **source of truth**; it's destined to become a git repo he can clone to any machine.
+A curated fork of [Matt Pocock's skills](https://github.com/mattpocock/skills), cut down from ~42 skills to 13 (later 16 with wayfinder and its dependencies, then `tr-teach` and `tr-handoff`), then extended with Tom's own, and reworked to match how Tom engineers. This repo is the **source of truth**; it's destined to become a git repo he can clone to any machine.
 
 Layout is flat and deliberate: `skills/tr-<name>/SKILL.md`, one folder per skill, no category directories. That maps one-to-one onto `~/.claude/skills/`, so installing is a copy — see [INSTALL.md](./INSTALL.md) and `sync.sh`.
 
@@ -38,6 +38,7 @@ Layout is flat and deliberate: `skills/tr-<name>/SKILL.md`, one folder per skill
 | `tr-prototype` | Throwaway prototype for a design question | model | — |
 | `tr-research` | Primary-source research → Markdown | model | — |
 | `tr-teach` | Multi-session teaching workspace | user | — |
+| `tr-handoff` | Conversation → handoff doc for a fresh session | user | — |
 
 "user" = `disable-model-invocation: true`, reachable only by typing `/tr-<name>`.
 
@@ -57,7 +58,9 @@ Each of these is intentional. If you're editing a skill and something below look
 
 5. **`tr-grill-with-docs` hard-stops after the interview.** It has an explicit list of things not to do at the end (no spec, no tickets, no code, no invoking other skills) and a fixed close-out message naming `/tr-to-spec` as the next step. Upstream is a one-liner that delegates and often rolls straight into spec-writing. *Why:* the boundary between "we understand this" and "this is committed to a spec" is Tom's to cross, and it was invisible before.
 
-6. **`tr-implement` gates on a plain-English brief.** Phase 1 produces ≤10 lines and then stops for a go-ahead via `AskUserQuestion`. *Why:* tickets are dense; a short brief is how Tom decides whether the agent understood the ticket before it spends a session on it. The brief opens with an **"In my words"** line — one sentence restating the ticket *without reusing its phrasing* — because a brief that echoes the ticket's own wording reads fine even when the ticket was misread, which defeats the whole gate.
+6. **`tr-implement` starts building without a brief — this was reverted, don't flip it back.** Phase 1 reads the ticket and codebase, then builds. It stops only for a **genuine blocker** (ambiguity with materially different readings, ADR contradiction, unfinished dependency, expensive-to-undo open decision), asked as one numbered round with recommendations; safe reversible defaults are taken and reported under **What I noticed**. An earlier version gated every ticket on a ≤10-line "In my words" brief plus an `AskUserQuestion` go-ahead. *Why reverted:* Tom found the gate cost more than it caught — picking the ticket is the go-ahead.
+
+6a. **`tr-implement` writes runbooks for manual setup.** Anything outside the code Tom must do by hand — env vars, secrets/tokens, third-party accounts or app registrations, cloud/DNS/CI setup, one-off commands — gets a runbook at `docs/runbooks/<task>.md` in the target repo (fixed shape: why, when, before you start, numbered steps, check it worked, if something goes wrong), indexed in `docs/runbooks/README.md`, with new env vars added to `.env.example`. Updates an existing runbook rather than duplicating; never writes a real secret; writes nothing when nothing manual came up. The close-out's **How to test it** points at the runbook as step 1 — the one allowed file name outside a command. *Why:* setup steps used to live only in the chat and were lost by the next machine or environment.
 
 7. **`tr-implement` closes with exactly four plain-English sections, under hard caps.** `## What you can do now` (one sentence), `## How to test it` (≤3 numbered steps), `## What I didn't finish` (≤4 bullets), `## What I noticed` (≤4 bullets) — and nothing else. Beneath the template sits a *"write it for someone who did not read the code"* block: no jargon (an explicit banned-word list), file and function names **only inside a command to paste**, never in prose, and the whole report fits on one screen. *Why the caps and the language rule exist:* the previous version already said "exactly three sections and nothing else" and it still produced a wall of implementation vocabulary that went over Tom's head. Section headings alone don't bound length or vocabulary — the caps and the banned-word list are what actually bite. *The one thing that outranks the caps* is honesty: a suite that didn't go green belongs in **What I didn't finish** with its failing output, cap or no cap.
 
@@ -77,7 +80,9 @@ Each of these is intentional. If you're editing a skill and something below look
 
 15. **`tr-wayfinder`, `tr-prototype`, `tr-research` imported as-is from upstream.** Brought in together because wayfinder's ticket types call the other two. Changes are mechanical only: `tr-` names, cross-references (`"tr-grilling"`, `"tr-research"`, …), `/tr-setup-skills` in place of `/setup-matt-pocock-skills`, and upstream's **Wayfinding operations** sections added to both tracker docs (plus the GitHub sub-issue convention they rely on). *Not yet tailored* — no Tom-specific behaviour yet; expect a grilling pass to reshape them. *Watch out:* `wayfinder:*` labels are a second label family alongside `ready-for-agent` (divergence 3); that's deliberate — map tickets are decisions, never implementation work, so the two never share an issue. Repos set up before this import have tracker docs without the Wayfinding section; re-run `/tr-setup-skills` or paste it in.
 
-16. **`tr-teach` imported from upstream `teach`, then tailored.** Standalone; shares nothing with the main flow and runs in its own directory. Added on top of upstream: a **How Tom learns** section that outranks the rest — *visual first* (every lesson opens with a diagram/chart, interactive where the idea has a knob, inline SVG, reference docs lead with the diagram), *sports-stats analogies* (baseball first, then American football — mapped explicitly, with where the analogy breaks, never forced, kept consistent via `NOTES.md`), and *mathematical framing* (formula + worked numeric example). Lessons default to a **light theme**. Also fixes three known upstream gaps: a **first-session starting-point round** (upstream had no assessment, so lessons assumed knowledge), `GLOSSARY-FORMAT.md` actually linked (upstream orphaned it), and a **shuffling quiz component** (models put the right answer in slot A even when told not to). Each lesson has a fixed five-part shape: picture → bridge → mechanism → drill → go deeper. *Why:* Tom asked for it — text-heavy, abstract lessons don't land for him.
+16. **`tr-teach` imported from upstream `teach`, then tailored.** Standalone; shares nothing with the main flow and runs in its own directory. Added on top of upstream: a **How Tom learns** section that outranks the rest — *visual first* (every lesson opens with a diagram/chart, interactive where the idea has a knob, inline SVG, reference docs lead with the diagram), *light reading* (Tom finds long text hard: short sentences and paragraphs, plain words, takeaway first, extra depth folded into `<details>` — less reading, same content), *everyday analogies* (picked to fit the topic — mapped explicitly, with where the analogy breaks, never forced, kept consistent via `NOTES.md`; **no sports analogies** — an earlier baseball/football version was removed because it didn't help), and *mathematical framing* (formula + worked numeric example). Lessons default to a **light theme**. Also fixes three known upstream gaps: a **first-session starting-point round** (upstream had no assessment, so lessons assumed knowledge), `GLOSSARY-FORMAT.md` actually linked (upstream orphaned it), and a **shuffling quiz component** (models put the right answer in slot A even when told not to). Each lesson has a fixed five-part shape: picture → bridge → mechanism → drill → go deeper. *Why:* Tom asked for it — text-heavy, abstract lessons don't land for him.
+
+17. **`tr-handoff` imported as-is from upstream `handoff`** (`productivity/handoff`, not the `in-progress/claude-handoff` background-agent variant). Changes are mechanical: `tr-` name, `/tr-` skill examples in the suggested-skills line. Writes to the OS temp dir, never the workspace.
 
 ### The `${localEnv:USERPROFILE}${localEnv:HOME}` trick
 
@@ -124,14 +129,14 @@ Then the installer, into a throwaway destination first:
 
 ```bash
 cd ..
-CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # 18 tr-* dirs
+CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # 19 tr-* dirs
 mkdir /tmp/skilltest/tr-ghost /tmp/skilltest/msk-keepme
 CLAUDE_SKILLS_DIR=/tmp/skilltest ./sync.sh --no-pull       # tr-ghost pruned, msk-keepme untouched
 find ~/.claude/skills -name .git                           # must stay empty
                                                            # (~/.claude/plugins has its own .git dirs — Claude Code owns those)
 ```
 
-Then a live run: install into a scratch project and walk `/tr-setup-skills` → `/tr-grill-with-docs` → `/tr-to-spec` → `/tr-to-tickets` → `/tr-implement`, confirming the customized behaviours: two tracker options only; grilling asks a numbered **round** at a time and stops without writing a spec; implement briefs (opening "In my words"), marks slices with `→`, and closes in the four plain-English sections on one screen.
+Then a live run: install into a scratch project and walk `/tr-setup-skills` → `/tr-grill-with-docs` → `/tr-to-spec` → `/tr-to-tickets` → `/tr-implement`, confirming the customized behaviours: two tracker options only; grilling asks a numbered **round** at a time and stops without writing a spec; implement starts without a brief (asks only on a real blocker), marks slices with `→`, writes a runbook when manual setup appears, and closes in the four plain-English sections on one screen.
 
 ## Open threads
 

@@ -1,6 +1,6 @@
 # tr-skills
 
-Tom's engineering skill tree for [Claude Code](https://claude.com/claude-code). Fourteen skills, one main flow: sharpen an idea, spec it, split it, build it, clean up after it.
+Tom's engineering skill tree for [Claude Code](https://claude.com/claude-code). Nineteen skills, one main flow: sharpen an idea, spec it, split it, build it, clean up after it.
 
 Adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills), trimmed to the flow I actually use and reworked to match how I like to work. See [CLAUDE.md](./CLAUDE.md) for what diverges from upstream and why.
 
@@ -15,7 +15,7 @@ Adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills), trimm
         │
 /tr-to-tickets            split it into tracer-bullet tickets
         │
-/tr-implement <ticket>    brief → build test-first → review → report
+/tr-implement <ticket>    build test-first → review → report
         │                 (/clear between tickets)
 /tr-cleanup-local         promote what's durable, bin the .scratch/ files
 ```
@@ -37,7 +37,7 @@ Not sure what to run? `/tr-ask-tom`.
 | [`tr-domain-modeling`](./skills/tr-domain-modeling/) | Sharpen domain terminology; write ADRs |
 | [`tr-to-spec`](./skills/tr-to-spec/) | Turn the conversation into a spec on the tracker |
 | [`tr-to-tickets`](./skills/tr-to-tickets/) | Split a spec into vertical slices with blocking edges |
-| [`tr-implement`](./skills/tr-implement/) | Build a ticket: brief, gate, TDD, review, plain-English report |
+| [`tr-implement`](./skills/tr-implement/) | Build a ticket: TDD, review, runbooks for manual setup, plain-English report |
 | [`tr-tdd`](./skills/tr-tdd/) | Red-green-refactor |
 | [`tr-code-review`](./skills/tr-code-review/) | Two-axis review of a diff: Standards and Spec |
 | [`tr-cleanup-local`](./skills/tr-cleanup-local/) | Close out a finished feature: promote durable notes to `CLAUDE.md`, delete its `.scratch/` files |
@@ -45,7 +45,8 @@ Not sure what to run? `/tr-ask-tom`.
 | [`tr-wayfinder`](./skills/tr-wayfinder/) | Plan an effort too big for one session as a map of decision tickets on the tracker |
 | [`tr-prototype`](./skills/tr-prototype/) | Throwaway prototype to answer a logic or UI design question |
 | [`tr-research`](./skills/tr-research/) | Background agent researches primary sources, writes cited findings to Markdown |
-| [`tr-teach`](./skills/tr-teach/) | Multi-session teaching workspace: visual-first lessons, sports-stats and math analogies, drills |
+| [`tr-teach`](./skills/tr-teach/) | Multi-session teaching workspace: visual-first, light-on-reading lessons, everyday analogies, drills |
+| [`tr-handoff`](./skills/tr-handoff/) | Compact the conversation into a handoff doc for a fresh session |
 
 ## Install
 
