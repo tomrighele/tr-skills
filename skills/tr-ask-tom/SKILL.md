@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Ask Tom
 
-You don't remember every skill, so ask. This tree is small on purpose: eighteen skills, one main flow, everything else feeding it.
+You don't remember every skill, so ask. This tree is small on purpose: nineteen skills, one main flow, everything else feeding it.
 
 If the user described a situation, name the one skill to run next and say why in a sentence. If they just typed the command with no context, give them the map below.
 
@@ -23,7 +23,7 @@ The route most work travels.
 1. **`/tr-grill-with-docs`** — sharpen the idea by interview, a round of questions at a time, updating `CONTEXT.md` and ADRs as terms and decisions get settled. It stops when the questions run out; it never writes a spec.
 2. **`/tr-to-spec`** — collapse the conversation into a spec and publish it to the tracker. No interview, just synthesis of what you already agreed.
 3. **`/tr-to-tickets`** — split the spec into tracer-bullet tickets, each a narrow but complete vertical slice, each declaring what blocks it.
-4. **`/tr-implement <ticket>`** — build one ticket. Briefs you in plain English and waits for a go-ahead, builds test-first via `/tr-tdd`, reviews via `/tr-code-review`, then reports back in four plain-English sections: what you can do now, how to test it, what it didn't finish, what it noticed. It does not commit.
+4. **`/tr-implement <ticket>`** — build one ticket. Starts straight away (asks only if something genuinely blocks it), builds test-first via `/tr-tdd`, reviews via `/tr-code-review`, writes a runbook in `docs/runbooks/` for anything you must set up by hand (env vars, tokens, accounts), then reports back in four plain-English sections: what you can do now, how to test it, what it didn't finish, what it noticed. It does not commit.
 5. **`/tr-cleanup-local`** — once every ticket is built and you've reviewed the work, close the feature out: promote anything durable into `CLAUDE.md`, then delete the feature's `.scratch/` files so they don't follow you into the next feature. Local-markdown tracker only; on GitHub the spec and tickets already live somewhere durable.
 
 **The short path:** if the change is small enough to finish in the session you're already in, go from step 1 straight to `/tr-implement`. Steps 2 and 3 exist to survive a `/clear`; skip them when nothing needs to survive one.
@@ -42,7 +42,11 @@ Then **`/clear` between every ticket**. Each ticket is self-contained by constru
 
 ## Learning, off to the side
 
-- **`/tr-teach`** — learn a topic over many sessions, in its own directory (not the project you're working in). Interviews you on why and on what you already know, then builds short visual-first HTML lessons, grounded in cited sources, with sports-stats and math analogies, each ending in a drill. Shares nothing with the main flow. Stuck on a concept mid-grilling? Note it, finish the round, learn it with `/tr-teach` in a separate workspace, come back.
+- **`/tr-teach`** — learn a topic over many sessions, in its own directory (not the project you're working in). Interviews you on why and on what you already know, then builds short visual-first HTML lessons, grounded in cited sources, light on reading, with everyday analogies and worked numbers, each ending in a drill. Shares nothing with the main flow. Stuck on a concept mid-grilling? Note it, finish the round, learn it with `/tr-teach` in a separate workspace, come back.
+
+## Moving between sessions
+
+- **`/tr-handoff`** — compact the current conversation into a handoff doc (saved to your OS temp dir, secrets redacted) so a fresh session can pick the work up. Pass what the next session is for to tailor it.
 
 ## Underneath the flow
 
@@ -78,5 +82,6 @@ Two references that run *beneath* the others, each the source of truth for its v
 | Branch or PR to review | `/tr-code-review` |
 | Stress-test thinking outside a repo | `/tr-grilling` |
 | Want to actually learn a topic, over weeks | `/tr-teach` |
+| Window is full, work needs to continue fresh | `/tr-handoff` |
 | A term means two things and it's causing bugs | `/tr-domain-modeling` |
 | A module's interface feels wrong | `/tr-codebase-design` |

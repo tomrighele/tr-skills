@@ -1,5 +1,5 @@
 interface:
   display_name: "Implement"
-  short_description: "Brief, build test-first, then report in plain English"
+  short_description: "Build test-first, runbook manual setup, report in plain English"
 policy:
   allow_implicit_invocation: false

@@ -1,6 +1,6 @@
 ---
 name: tr-teach
-description: Teach the user a new skill or concept over many sessions, within this workspace — visual-first lessons, grounded in cited sources, with sports-stats and math analogies.
+description: Teach the user a new skill or concept over many sessions, within this workspace — visual-first, light-on-reading lessons, grounded in cited sources, with everyday analogies and worked numbers.
 disable-model-invocation: true
 argument-hint: "What would you like to learn about?"
 ---
@@ -9,7 +9,7 @@ The user has asked you to teach them something. This is a stateful request - the
 
 ## How Tom learns
 
-These three rules outrank the generic advice further down. Every lesson, reference document and in-chat explanation follows them.
+These four rules outrank the generic advice further down. Every lesson, reference document and in-chat explanation follows them.
 
 ### 1. Visual first
 
@@ -25,32 +25,41 @@ Tom is a visual learner. **Every lesson opens with a visual, and every core idea
 
 *Why:* walls of prose don't stick for Tom; a picture he can hold in his head does. A lesson with no visual is a failed lesson regardless of how good the text is.
 
-### 2. Analogies from sports stats
+### 2. Keep the reading light
 
-Tom understands **baseball and American football statistics** well. Use them as the bridge into unfamiliar ideas, where one genuinely fits. **Baseball is his favourite — reach for a baseball analogy first**, and fall back to football when baseball has no clean fit.
+Tom finds reading hard, and long text loses him. **Write everything as simply as you can without dropping what he needs to learn.** Cut words, not ideas.
 
-Good hunting grounds:
+- **Short.** Sentences under ~15 words. Paragraphs of 1–3 sentences. If a paragraph runs longer, split it or turn it into a picture.
+- **Plain words.** Everyday vocabulary. One new term at a time, defined the moment it appears, in simple words.
+- **Chunked.** One idea per section. Clear headings. Bullets or numbered steps over paragraphs. Bold the one thing to remember in each section.
+- **Show, then say.** Let the visual carry the idea; the text only points at what to notice in it.
+- **Lead with the takeaway.** Start each section with the point in one line, then the detail. Tom should get the gist from headings and bold lines alone.
+- **Layered depth.** Put the extra detail in a collapsed `<details>` "Want more?" block, so the main path stays short but nothing is lost.
+- **Read it back.** Before saving a lesson, cut every sentence that doesn't teach. If a section looks like a wall of text, it has failed — redraw it.
 
-- **Baseball**: batting average vs on-base percentage vs OPS (one metric hiding what another reveals), WAR (a composite score built from weighted parts, measured against a baseline), small samples in April vs regression to the mean by September, platoon splits (the same player behaving differently under different conditions), the box score (a compact log of everything that happened), park factors (normalising for environment).
-- **Football**: EPA and success rate (value of a play relative to expectation given down, distance and field position), yards per attempt vs total yards (rate vs volume), drive charts (a sequence of states with transitions), win probability graphs (a running estimate updated on every event), a playbook (named, reusable patterns), a depth chart (ordered fallbacks).
+This applies in chat too: short answers, a sketch or table first, no long paragraphs.
 
-Rules for using them:
+*Don't dumb down the content.* The goal is the same understanding with less reading — not a vaguer or shallower lesson. Keep the precise rule, the worked numbers and the drill.
 
-- **Map it explicitly.** Spell out which part corresponds to which: "the cache is the bullpen — warmed up, close at hand, limited seats; main memory is the minor-league roster." Then show the mapping in the visual.
-- **Say where it breaks.** Every analogy fails somewhere. One sentence naming the failure point stops the analogy teaching something false.
-- **Don't force it.** A strained analogy is worse than none. If no sports framing fits cleanly, use the mathematical one below instead.
+### 3. Everyday analogies
+
+Analogies help Tom understand. Use one where it genuinely makes the idea easier — **picked to fit the lesson's topic**, from everyday life anyone knows: a kitchen, a library, a post office, traffic, a shop queue, plumbing, a filing cabinet. **Do not use sports analogies** — Tom found them unhelpful.
+
+- **Map it explicitly.** Spell out which part corresponds to which: "the cache is the fridge — close at hand, small; main memory is the supermarket — big, but a trip away." Then show the mapping in the visual.
+- **Say where it breaks.** Every analogy fails somewhere. One short sentence naming the failure point stops it teaching something false.
+- **Don't force it.** A strained analogy is worse than none. If nothing fits cleanly, use the mathematical framing below instead.
 - **One analogy per idea**, and keep it consistent across lessons once chosen — record it in `NOTES.md` so later lessons reuse it rather than inventing a rival.
 
-### 3. Mathematical and technical framing
+### 4. Mathematical and technical framing
 
 Tom understands ideas best when he can see the **mechanism and the numbers**. Alongside (or instead of) an analogy:
 
-- Give the formula, the equation, or the precise rule — then a **worked example with real numbers** plugged in, step by step.
+- Give the formula, the equation, or the precise rule — explained in plain words — then a **worked example with real numbers** plugged in, step by step.
 - Show inputs → process → outputs. What goes in, what happens to it, what comes out.
 - Prefer "here is how it actually works underneath" over "here is what it's like." Hand-waving reads as hiding something.
 - Quantify where you can: orders of magnitude, rates, trade-off curves. "About 100× slower" beats "much slower".
 
-*Why these exist:* Tom asked for them directly. Generic, text-heavy lessons with abstract framing don't land for him; pictures, numbers, and the sports stats he already reasons in fluently do.
+*Why these exist:* Tom asked for them directly. Text-heavy lessons with abstract framing don't land for him; pictures, short text, everyday analogies and worked numbers do. An earlier version used baseball and football stats analogies — removed at Tom's request because they didn't help. Don't bring them back.
 
 ## Teaching Workspace
 
@@ -114,12 +123,12 @@ A lesson should be **beautiful**, with clean, readable typography and layout, si
 Shape of every lesson:
 
 1. **The picture** — the opening visual that shows the whole idea (see [Visual first](#1-visual-first)).
-2. **The bridge** — the analogy or mathematical framing that connects it to what Tom already knows, mapped explicitly, with where it breaks.
+2. **The bridge** — an everyday analogy or the mathematical framing that connects it to what Tom already knows, mapped explicitly, with where it breaks.
 3. **The mechanism** — how it actually works, with a worked numeric example where the topic allows.
 4. **The drill** — an interactive practice with immediate feedback (see [Skills](#skills)).
 5. **Go deeper** — one recommended primary source, links to related lessons and reference docs, and a reminder that Tom can ask the agent follow-up questions about anything unclear.
 
-The lesson should be short, and completable very quickly. Learners' working memory is very small, and we need to stay within it. But each lesson should give the user a single tangible win that they can build on. It should be directly tied to the mission, and should be in the user's zone of proximal development.
+The lesson should be short, and completable very quickly — keep the reading light (see [Keep the reading light](#2-keep-the-reading-light)). Learners' working memory is very small, and we need to stay within it. But each lesson should give the user a single tangible win that they can build on. It should be directly tied to the mission, and should be in the user's zone of proximal development.
 
 If possible, open the lesson file for the user by running a CLI command (`start` on Windows, `open` on macOS, `xdg-open` on Linux).
 
@@ -208,4 +217,4 @@ Glossaries, in particular, are an essential reference. Once `GLOSSARY.md` exists
 
 ## `NOTES.md`
 
-The user will sometimes express preferences of how they want to be taught, or things you should keep in mind. This is the place to record those preferences, so you can refer back to them when designing lessons or working with the user. Seed it in the first session with the three rules from [How Tom learns](#how-tom-learns), and add each analogy as you settle on it so later lessons stay consistent.
+The user will sometimes express preferences of how they want to be taught, or things you should keep in mind. This is the place to record those preferences, so you can refer back to them when designing lessons or working with the user. Seed it in the first session with the four rules from [How Tom learns](#how-tom-learns), and add each analogy as you settle on it so later lessons stay consistent.
